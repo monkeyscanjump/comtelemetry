@@ -11,10 +11,11 @@ Comtelemetry is a comprehensive telemetry monitoring system designed to track an
 NVM (Node Version Manager) is a tool that allows you to manage multiple versions of Node.js on the same machine. To install NVM, follow these steps:
 
 1. **Download and Install NVM:**
+   More info: [NVM Github](https://github.com/nvm-sh/nvm).
 
    On macOS and Linux:
    ```sh
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
    ```
 
    On Windows, you can download the NVM installer from the [nvm-windows repository](https://github.com/coreybutler/nvm-windows/releases).
@@ -59,6 +60,8 @@ Python and Pip are required for certain dependencies and tools used in this proj
    ```sh
    pip install communex
    ```
+
+4. **Make sure you have at least one commune key imported**
 
 ## Project Setup
 
