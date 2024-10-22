@@ -1,0 +1,14 @@
+.balanceSum {
+  background: var(--color-highlight);
+  padding: var(--padding-one);
+  border-radius: var(--border-radius1);
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 20px;
+  color: #333;
+}

@@ -1,0 +1,103 @@
+/* ## CSS RESETS */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+/* STYLES */
+:root {
+  --color-background: #fff;
+  --color-foreground: #171717;
+  --color-highlight: rgba(0, 128, 128, 1);
+  --color-highlight2: rgba(0, 0, 0, 0.5);
+  --color-highlight3: rgba(255, 0, 0, 0.1);
+
+  --value-one: 1.61%;
+  --size-one: 1.61rem;
+  --size-one-half: calc(var(--size-one) / 2);
+  --space-one: var(--size-one);
+  --space-one-half: calc(var(--space-one) / 2);
+
+  --padding-one: var(--space-one-half);
+
+  --border-radius1: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #171717;
+    --color-foreground: #fff;
+  }
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--color-foreground);
+  background: var(--color-background);
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--size-one-half);
+  line-height: 1.161;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  font-size: calc(var(--space-one) * 1.75);
+}
+
+h2 {
+  font-size: calc(var(--space-one) * 1.5);
+}
+
+h3 {
+  font-size: calc(var(--space-one) * 1.25);
+}
+
+h4 {
+  font-size: calc(var(--space-one));
+}
+
+h5 {
+  font-size: calc(var(--space-one) * 0.75);
+}
+
+h6 {
+  font-size: calc(var(--space-one) * 0.5);
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+button {
+  border: none;
+  padding: var(--space-one-half) var(--space-one);
+  border-radius: var(--border-radius1);
+  background: var(--color-foreground);
+  color: var(--color-background);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.3;
+}
+
+button.highlight {
+  background: var(--color-highlight);
+}

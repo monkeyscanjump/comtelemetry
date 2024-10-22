@@ -1,0 +1,22 @@
+.communeKeysDisplay {
+    display: grid;
+    grid-auto-flow: row;
+    gap: var(--space-one);
+}
+
+.communeKey {
+    background: var(--color-highlight2);
+    padding: var(--padding-one);
+    border-radius: var(--border-radius1);
+    display: grid;
+    grid-auto-flow: row;
+    gap: var(--padding-one);
+}
+
+.communeKeyInactive {
+  background: var(--color-highlight3);
+}
+
+.communeKeyName {
+    font-family: var(--font-mono);
+}

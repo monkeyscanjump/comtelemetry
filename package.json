@@ -1,0 +1,32 @@
+{
+    "name": "comtelemetry",
+    "version": "1.0.0",
+    "scripts": {
+      "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
+      "build:shared": "tsc --build shared",
+      "build:backend": "cd backend && npm install && npm run build",
+      "build:frontend": "cd frontend && npm install && npm run build",
+      "start:backend": "cd backend && npm install && npm start",
+      "start:frontend": "cd frontend && npm install && npm start",
+      "dev:backend": "cd backend && npm install && npm run dev",
+      "dev:frontend": "cd frontend && npm install && npm run dev",
+      "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+      "start:pm2": "pm2 start ecosystem.config.js",
+      "stop:pm2": "pm2 stop ecosystem.config.js",
+      "restart:pm2": "pm2 restart ecosystem.config.js",
+      "delete:pm2": "pm2 delete ecosystem.config.js"
+    },
+    "devDependencies": {
+        "@types/node": "^22.7.5",
+        "dotenv": "^16.4.5",
+        "nodemon": "^3.1.7",
+        "pm2": "^5.1.0",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0"
+    },
+    "private": true,
+    "dependencies": {
+        "concurrently": "^9.0.1",
+        "cron-parser": "^4.9.0"
+    }
+}
