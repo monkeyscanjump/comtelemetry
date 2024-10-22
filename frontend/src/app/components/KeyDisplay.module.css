@@ -6,6 +6,7 @@
 
 .communeKey {
     background: var(--color-highlight2);
+    color: var(--color-highlight2-foreground);
     padding: var(--padding-one);
     border-radius: var(--border-radius1);
     display: grid;

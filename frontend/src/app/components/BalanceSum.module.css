@@ -1,5 +1,6 @@
 .balanceSum {
   background: var(--color-highlight);
+  color: var(--color-highlight-foreground);
   padding: var(--padding-one);
   border-radius: var(--border-radius1);
 }

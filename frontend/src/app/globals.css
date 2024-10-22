@@ -4,10 +4,13 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 /* STYLES */
 :root {
   --color-background: #fff;
-  --color-foreground: #171717;
+  --color-foreground: #000;
   --color-highlight: rgba(0, 128, 128, 1);
+  --color-highlight-foreground: #fff;
   --color-highlight2: rgba(0, 0, 0, 0.5);
-  --color-highlight3: rgba(255, 0, 0, 0.1);
+  --color-highlight2-foreground: #fff;
+  --color-highlight3: rgba(255, 0, 0, 0.5);
+  --color-highlight3-foreground: #fff;
 
   --value-one: 1.61%;
   --size-one: 1.61rem;
@@ -89,7 +92,7 @@ button {
   border: none;
   padding: var(--space-one-half) var(--space-one);
   border-radius: var(--border-radius1);
-  background: var(--color-foreground);
+  background: var(--color-highlight);
   color: var(--color-background);
   cursor: pointer;
 }
