@@ -15,6 +15,7 @@ It gathers and displays data based on web API data from Comstats and Communex en
 - [ ] Create Polkadot wallet login, update UI with new permission-based logic.
 - [ ] Create BETA version, prepare for production build.
 - [ ] Add timeline (databse) logic for FT, create graphs, automate process through UI interaction.
+- [ ] Automate connection security and optional Wireguard.
 - [x] More to come!
 
 ## Prerequisites
