@@ -2,7 +2,20 @@
 
 ## Introduction
 
-Comtelemetry is a comprehensive telemetry monitoring system designed to track and visualize various metrics and statistics for a distributed network. The project integrates both backend and frontend components to provide real-time data updates and interactive visualizations. The backend is responsible for data collection and processing, while the frontend offers a user-friendly interface for data presentation and interaction.
+A web dashboard for Commune AI users that need module data from multiple machines, in a single point of failure Web GUI.
+It gathers and displays data based on web API data from Comstats and Communex endpoints.
+
+## Roadmap (time is relative)
+
+- [x] Create project, backend and frontend.
+- [x] (backend) Create in-memory database for Communex key path.
+- [x] (frontend) Create GUI for data.
+- [ ] Create subnet endpoint BK, display data FT.
+- [ ] Create secure connection between apps, prepare for multiple BK to single FT (heartbeat).
+- [ ] Create Polkadot wallet login, update UI with new permission-based logic.
+- [ ] Create BETA version, prepare for production build.
+- [ ] Add timeline (databse) logic for FT, create graphs, automate process through UI interaction.
+- [x] More to come!
 
 ## Prerequisites
 
@@ -61,7 +74,7 @@ Python and Pip are required for certain dependencies and tools used in this proj
    pip install communex
    ```
 
-4. **Make sure you have at least one commune key imported**
+4. **Make sure you have at least one commune key imported/created**
 
 ## Project Setup
 
