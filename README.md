@@ -13,9 +13,10 @@ It gathers and displays data based on web API data from Comstats and Communex en
 - [ ] Create subnet endpoint BK, display data FT.
 - [ ] Create secure connection between apps, prepare for multiple BK to single FT (heartbeat).
 - [ ] Create Polkadot wallet login, update UI with new permission-based logic.
-- [ ] Create BETA version, prepare for production build.
+- [ ] Create BETA version, prepare for production build, create development branch.
 - [ ] Add timeline (databse) logic for FT, create graphs, automate process through UI interaction.
 - [ ] Automate connection security and optional Wireguard.
+- [ ] Find a way to save timeline data on Commune storage, based on logged-in wallet.
 - [x] More to come!
 
 ## Prerequisites
