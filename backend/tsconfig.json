@@ -11,12 +11,15 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["../shared/config/*"]
+      "@config/*": ["../shared/config/*"],
+      "@types/*": [
+        "../shared/types/*"
+      ]
     },
     "moduleResolution": "node",
     "composite": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../shared/utils/debounce.ts"],
   "exclude": ["node_modules"],
   "references": [
     {

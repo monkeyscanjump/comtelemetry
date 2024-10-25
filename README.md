@@ -10,13 +10,16 @@ It gathers and displays data based on web API data from Comstats and Communex en
 - [x] Create project, backend and frontend.
 - [x] (backend) Create in-memory database for Communex key path.
 - [x] (frontend) Create GUI for data.
+- [x] Debounce BK API requests, display delay in FT.
 - [ ] Create subnet endpoint BK, display data FT.
 - [ ] Create secure connection between apps, prepare for multiple BK to single FT (heartbeat).
 - [ ] Create Polkadot wallet login, update UI with new permission-based logic.
+- [ ] Add 'privacyMode' global state, update component logic hide any data on UI.
 - [ ] Create BETA version, prepare for production build, create development branch.
 - [ ] Add timeline (databse) logic for FT, create graphs, automate process through UI interaction.
 - [ ] Automate connection security and optional Wireguard.
 - [ ] Find a way to save timeline data on Commune storage, based on logged-in wallet.
+- [ ] Refactor accessibility, include localizaton. 
 - [ ] Prepare cominer.ai
 - [x] More to come!
 

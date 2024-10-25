@@ -1,19 +1,22 @@
-import fs from 'fs';
-import path from 'path';
-import config from '@config/index';
-import { regenerateKeys, getKeys } from './keyService';
-import { setupCronJobs } from './cronService';
-import { debounce } from '../helpers/debounce';
+import { debounce } from '../../../shared/utils/debounce';
+import { fetchDataForKey } from './dataService';
+import { Key, Endpoint } from '../types';
 
-const debouncedRegenerateKeysAndSetupCronJobs = debounce(() => {
-  regenerateKeys();
-  setupCronJobs(getKeys());
-}, 100);
+const debouncedFetchDataForKey = debounce(async (key: Key, endpoint: Endpoint) => {
+    await fetchDataForKey(key, endpoint);
+}, 3000); // Adjust the debounce delay as needed
 
-export function watchKeyFolder() {
-  fs.watch(config.keyFolder, (eventType, filename) => {
-    if (filename && path.extname(filename) === '.json') {
-      debouncedRegenerateKeysAndSetupCronJobs();
+export async function watchService(keys: Key[], endpoints: Endpoint[]) {
+    for (const key of keys) {
+        for (const endpoint of endpoints) {
+            await debouncedFetchDataForKey(key, endpoint);
+        }
     }
-  });
+}
+
+export async function watchKeyFolder() {
+    // Implement the logic to watch the key folder
+    // This is a placeholder implementation
+    console.log('Watching key folder...');
+    // You can use fs.watch or similar to watch the folder for changes
 }

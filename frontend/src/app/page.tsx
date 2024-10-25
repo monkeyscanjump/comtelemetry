@@ -25,7 +25,7 @@ export default function Home() {
         <ControlBar fetchData={fetchData} />
       </div>
       <div className={styles.pageItem}>
-        <KeyDisplay data={data} />
+        <KeyDisplay data={data} loading={isLoading} />
       </div>
       {isLoading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}

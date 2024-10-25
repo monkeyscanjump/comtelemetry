@@ -1,12 +1,12 @@
+"use client"; // This is a client component
 import React from 'react';
-import { formatBalance, convertSeconds } from '../utils/helpers';
-import { KeyDisplayProps } from '../types/types';
+import { formatBalance } from '../utils/helpers';
+import { KeyDisplayProps } from '@types/types';
 import styles from './KeyDisplay.module.css';
 
-const KeyDisplay: React.FC<KeyDisplayProps> = ({ data }) => {
+const KeyDisplay: React.FC<KeyDisplayProps> = ({ data, loading }) => {
   return (
     <div className={styles.communeKeysDisplay}>
-      <h3>{data && Object.entries(data).length ? 'Your Commune Keys' : 'No data available yet. Trigger jobs to populate backend data.'}</h3>
       {data && Object.entries(data).map(([key, value]) => (
         <div
           key={key}
@@ -15,12 +15,18 @@ const KeyDisplay: React.FC<KeyDisplayProps> = ({ data }) => {
           <h3 className={styles.communeKeyName}>{key}</h3>
           <p><b>Address:</b> {value.address}</p>
           <div className={styles.communeKeyDetails}>
+            {loading && value.stats?.debounceApplied && (
+              <p><b>Stats Debounce Applied:</b> Yes, {value.stats.debounceValue}ms</p>
+            )}
+            {loading && value.balance?.balances.debounceApplied && (
+              <p><b>Balance Debounce Applied:</b> Yes, {value.balance.balances.debounceValue}ms</p>
+            )}
             {value.stats?.subnets ? (
               <ul>
                 <h5>Subnets:</h5>
                 {value.stats.subnets.map((subnet, index) => (
                   <li key={index}>
-                    {subnet.name} (SN: {subnet.subnet_id}) UID: {subnet.uid} | Tempo: {subnet.tempo} ({convertSeconds(8 * subnet.tempo)}) | Emission {formatBalance(subnet.emission)} | Incentive {subnet.incentive} | Dividends {subnet.dividends}
+                    {subnet.name} (SN: {subnet.subnet_id}) UID: {subnet.uid} | Tempo: {subnet.tempo} | Emission {formatBalance(subnet.emission)} | Incentive {subnet.incentive} | Dividends {subnet.dividends} | Delegation Fee {subnet.delegation_fee}
                   </li>
                 ))}
               </ul>

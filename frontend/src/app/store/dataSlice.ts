@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DataObject } from '../types/types'; // Import DataObject type
+import { DataObject } from '@types/types';
 
 export interface DataState {
-  value: DataObject | null; // Use DataObject type
+  value: DataObject | null;
   isLoading: boolean;
 }
 
@@ -15,7 +15,7 @@ const dataSlice = createSlice({
   name: 'data',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<DataObject>) { // Use DataObject type
+    setData(state, action: PayloadAction<DataObject>) {
       state.value = action.payload;
     },
     setLoading(state, action: PayloadAction<boolean>) {
