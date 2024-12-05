@@ -4,5 +4,11 @@
     { "path": "./shared" },
     { "path": "./backend" },
     { "path": "./frontend" }
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@comalt/*": ["shared/*"]
+    }
+  }
 }

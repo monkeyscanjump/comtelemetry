@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { setData } from '../store/dataSlice';
 import axios from 'axios';
-import { DataObject } from '../types/types';
+import { DataObject } from '@comalt/types';
 
 const useFetchData = (url: string, interval: number) => {
   const dispatch = useDispatch();

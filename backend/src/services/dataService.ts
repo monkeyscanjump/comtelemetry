@@ -1,91 +1,108 @@
 import axios from 'axios';
 import { Key, Endpoint, Data } from '../types';
 import { parseAndFilterEndpoints } from '../helpers/parseAndFilterEndpoints';
-import config from '@config/index';
+import config from '@comalt/config';
 import { debounce } from '../../../shared/utils/debounce';
 
 let data: Data = {};
-const requestCounters: Map<string, number> = new Map();
 
-function resetCounter(endpointName: string): void {
-    requestCounters.set(endpointName, 1);
+// Create an Axios instance with an empty config object
+const axiosInstance = axios.create({});
+
+/**
+ * Custom type for Axios error.
+ */
+interface AxiosError extends Error {
+  config: any;
+  code?: string;
+  request?: any;
+  response?: any;
+  isAxiosError: boolean;
+  toJSON: () => object;
 }
 
-const debouncedFetch = debounce(async (url: string, method: string, headers: any) => {
-    return axios({
-        method,
-        url,
-        headers
-    });
-}, config.delayMs);
+/**
+ * Custom type guard function to check if an error is an AxiosError.
+ * @param error - The error to check.
+ * @returns {boolean} - True if the error is an AxiosError, false otherwise.
+ */
+function isAxiosError(error: any): error is AxiosError {
+  return error && error.isAxiosError === true;
+}
 
-export async function fetchDataForKey(key: Key, endpoint: Endpoint) {
-    try {
-        const endpointName = endpoint.name;
-        if (!requestCounters.has(endpointName)) {
-            requestCounters.set(endpointName, 1);
-        }
+/**
+ * Helper function to check if an error is retryable.
+ * @param error - The error to check.
+ * @returns {boolean} - True if the error is retryable, false otherwise.
+ */
+function isRetryableError(error: any): error is AxiosError {
+  return (
+    isAxiosError(error) &&
+    error.response &&
+    error.response.status === 500 &&
+    !error.config.__isRetryRequest
+  );
+}
 
-        // Reset requestCounter every 100 requests
-        let requestCounter = requestCounters.get(endpointName);
-        if (requestCounter === undefined || requestCounter >= 100) {
-            resetCounter(endpointName);
-            requestCounter = 1;
-        }
+// Set up Axios interceptor for retry logic
+axiosInstance.interceptors.response.use(
+  response => response,
+  async error => {
+    if (isRetryableError(error)) {
+      const config = error.config;
 
-        const url = endpoint.endpoint.replace('${keys.address}', key.address);
+      // Add a retry count to prevent infinite loops
+      config.__retryCount = config.__retryCount || 0;
 
-        let response;
-        let debounceApplied = false;
-        let debounceValue = 0;
-        if (requestCounter % 10 === 0) {
-            console.log(`Applying debounce for request number ${requestCounter} on endpoint ${endpointName}`);
-            response = await debouncedFetch(url, endpoint.method, endpoint.headers);
-            debounceApplied = true;
-            debounceValue = config.delayMs * requestCounter;
-        } else {
-            response = await axios({
-                method: endpoint.method,
-                url,
-                headers: endpoint.headers
-            });
-        }
-
-        if (!data[key.name]) data[key.name] = {};
-
-        // Parse data.
-        const parsedData = parseAndFilterEndpoints({ [endpoint.name]: response.data });
-
-        // Save response data to memory.
-        data[key.name].address = key.address;
-        data[key.name][endpoint.name] = parsedData;
-
-        // Local function to update debounce values
-        const updateDebounceValues = (obj: any, properties: string[]) => {
-            properties.forEach(property => {
-                const keys = property.split('.');
-                let target = obj;
-                keys.forEach((key, index) => {
-                    if (!target[key]) {
-                        target[key] = index === keys.length - 1 ? {} : {};
-                    }
-                    target = target[key];
-                });
-                target.debounceApplied = debounceApplied;
-                target.debounceValue = debounceValue;
-            });
-        };
-
-        // Add debounce information to stats, balance, and any other specified properties
-        updateDebounceValues(data[key.name], ['stats', 'balance.balances']);
-
-        // Increment requestCounter
-        requestCounters.set(endpointName, requestCounter + 1);
-    } catch (error) {
-        console.error(`Error fetching data for ${key.name} from ${endpoint.endpoint}:`, error);
+      if (config.__retryCount < 2) { // Retry maximum 2 times
+        config.__retryCount += 1;
+        console.log(`Retrying request for URL: ${config.url} (Attempt ${config.__retryCount})`);
+        return axiosInstance.request(config);
+      }
     }
+    return Promise.reject(error);
+  }
+);
+
+// Debounce wrapper function with headers as an optional parameter
+const debouncedFetch = debounce(
+  async (url: string, method: string, headers?: Record<string, string>) => {
+    return axiosInstance({ method, url, headers });
+  },
+  config.delayMs
+);
+
+/**
+ * Fetches data for a given key and endpoint.
+ * @param key - The key for which to fetch data.
+ * @param endpoint - The endpoint from which to fetch data.
+ */
+export async function fetchDataForKey(key: Key, endpoint: Endpoint): Promise<void> {
+  try {
+    const endpointName = endpoint.name;
+    const url = endpoint.endpoint.replace('${keys.address}', key.address);
+
+    const response = await debouncedFetch(url, endpoint.method, endpoint.headers);
+
+    // Initialize the data object for the key if not already done
+    data[key.name] = data[key.name] || { address: key.address };
+
+    // Parse the response data
+    const parsedData = parseAndFilterEndpoints({
+      [endpoint.name]: response.data,
+    });
+
+    // Save the parsed data to the data object
+    data[key.name][endpointName] = parsedData;
+  } catch (error) {
+    console.error(`Error fetching data for ${key.name} from ${endpoint.endpoint}:`, error);
+  }
 }
 
-export function getData() {
-    return data;
+/**
+ * Retrieves the collected data.
+ * @returns {Data} - The collected data.
+ */
+export function getData(): Data {
+  return data;
 }

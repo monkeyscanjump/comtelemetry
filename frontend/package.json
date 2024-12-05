@@ -7,12 +7,12 @@
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
-    "dev": "next dev"
+    "dev": "cross-env NODE_ENV=development nodemon --watch '../shared/config/index.ts' --exec 'next dev'"
   },
   "dependencies": {
     "@did-network/dapp-sdk": "^0.1.9",
     "@reduxjs/toolkit": "^2.3.0",
-    "axios": "^0.21.4",
+    "axios": "^1.7.8",
     "dotenv": "^16.4.5",
     "next": "latest",
     "react": "latest",
@@ -27,6 +27,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
+    "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "latest"

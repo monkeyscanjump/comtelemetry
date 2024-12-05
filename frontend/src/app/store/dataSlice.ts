@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DataObject } from '@types/types';
+import { DataObject } from '@comalt/types';
 
 export interface DataState {
   value: DataObject | null;

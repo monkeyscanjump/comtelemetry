@@ -14,11 +14,24 @@ const dataService_1 = require("../services/dataService");
 const cronService_1 = require("../services/cronService");
 const keyService_1 = require("../services/keyService");
 const router = (0, express_1.Router)();
-// DATA API.
+/**
+ * GET /data
+ * Retrieves the collected data.
+ */
 router.get('/data', (req, res) => {
-    res.json((0, dataService_1.getData)());
+    try {
+        const data = (0, dataService_1.getData)();
+        res.json(data);
+    }
+    catch (error) {
+        console.error('Error retrieving data:', error);
+        res.status(500).json({ error: 'Failed to retrieve data' });
+    }
 });
-// Trigger all cron jobs
+/**
+ * POST /trigger-jobs
+ * Triggers all cron jobs immediately.
+ */
 router.post('/trigger-jobs', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, cronService_1.triggerAllJobs)((0, keyService_1.getKeys)());

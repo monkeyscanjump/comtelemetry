@@ -7,7 +7,7 @@ import useFetchData from './hooks/useFetchData';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import styles from "./page.module.css";
-import config from '@config/index';
+import config from '@comalt/config';
 
 export default function Home() {
   const isLoading = useSelector((state: RootState) => state.data.isLoading);

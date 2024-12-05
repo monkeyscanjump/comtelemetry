@@ -16,45 +16,77 @@ exports.fetchDataForKey = fetchDataForKey;
 exports.getData = getData;
 const axios_1 = __importDefault(require("axios"));
 const parseAndFilterEndpoints_1 = require("../helpers/parseAndFilterEndpoints");
-const index_1 = __importDefault(require("@config/index"));
+const config_1 = __importDefault(require("@comalt/config"));
+const debounce_1 = require("../../../shared/utils/debounce");
 let data = {};
-let requestCounter = 0;
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+// Create an Axios instance with an empty config object
+const axiosInstance = axios_1.default.create({});
+/**
+ * Custom type guard function to check if an error is an AxiosError.
+ * @param error - The error to check.
+ * @returns {boolean} - True if the error is an AxiosError, false otherwise.
+ */
+function isAxiosError(error) {
+    return error && error.isAxiosError === true;
 }
+/**
+ * Helper function to check if an error is retryable.
+ * @param error - The error to check.
+ * @returns {boolean} - True if the error is retryable, false otherwise.
+ */
+function isRetryableError(error) {
+    return (isAxiosError(error) &&
+        error.response &&
+        error.response.status === 500 &&
+        !error.config.__isRetryRequest);
+}
+// Set up Axios interceptor for retry logic
+axiosInstance.interceptors.response.use(response => response, (error) => __awaiter(void 0, void 0, void 0, function* () {
+    if (isRetryableError(error)) {
+        const config = error.config;
+        // Add a retry count to prevent infinite loops
+        config.__retryCount = config.__retryCount || 0;
+        if (config.__retryCount < 2) { // Retry maximum 2 times
+            config.__retryCount += 1;
+            console.log(`Retrying request for URL: ${config.url} (Attempt ${config.__retryCount})`);
+            return axiosInstance.request(config);
+        }
+    }
+    return Promise.reject(error);
+}));
+// Debounce wrapper function with headers as an optional parameter
+const debouncedFetch = (0, debounce_1.debounce)((url, method, headers) => __awaiter(void 0, void 0, void 0, function* () {
+    return axiosInstance({ method, url, headers });
+}), config_1.default.delayMs);
+/**
+ * Fetches data for a given key and endpoint.
+ * @param key - The key for which to fetch data.
+ * @param endpoint - The endpoint from which to fetch data.
+ */
 function fetchDataForKey(key, endpoint) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            requestCounter++;
+            const endpointName = endpoint.name;
             const url = endpoint.endpoint.replace('${keys.address}', key.address);
-            // Apply delay if requestCounter is a multiple of 10
-            if (requestCounter % 10 === 0) {
-                const delayTime = Math.floor(requestCounter / 10) * index_1.default.delayMs;
-                console.log(`Applying delay of ${delayTime}ms for request number ${requestCounter}`);
-                yield delay(delayTime);
-            }
-            const response = yield (0, axios_1.default)({
-                method: endpoint.method,
-                url,
-                headers: endpoint.headers
+            const response = yield debouncedFetch(url, endpoint.method, endpoint.headers);
+            // Initialize the data object for the key if not already done
+            data[key.name] = data[key.name] || { address: key.address };
+            // Parse the response data
+            const parsedData = (0, parseAndFilterEndpoints_1.parseAndFilterEndpoints)({
+                [endpoint.name]: response.data,
             });
-            if (!data[key.name])
-                data[key.name] = {};
-            // Parse data
-            const parsedData = (0, parseAndFilterEndpoints_1.parseAndFilterEndpoints)({ [endpoint.name]: response.data });
-            // Save response data
-            data[key.name].address = key.address;
-            data[key.name][endpoint.name] = parsedData;
-            // Reset requestCounter every 100 requests
-            if (requestCounter >= 100) {
-                requestCounter = 0;
-            }
+            // Save the parsed data to the data object
+            data[key.name][endpointName] = parsedData;
         }
         catch (error) {
             console.error(`Error fetching data for ${key.name} from ${endpoint.endpoint}:`, error);
         }
     });
 }
+/**
+ * Retrieves the collected data.
+ * @returns {Data} - The collected data.
+ */
 function getData() {
     return data;
 }

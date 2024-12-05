@@ -9,7 +9,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
-    "composite": true
+    "composite": true,
+    "paths": {
+      "@comalt/*": ["*"]
+    }
   },
   "include": ["**/*"]
 }

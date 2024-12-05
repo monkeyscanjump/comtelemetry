@@ -11,10 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["../shared/config/*"],
-      "@types/*": [
-        "../shared/types/*"
-      ]
+      "@comalt/*": ["../shared/*"]
     },
     "moduleResolution": "node",
     "composite": true

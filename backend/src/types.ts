@@ -47,7 +47,7 @@ export interface InputObject {
     delegation_fee: number;
   };
 }
-  
+
 export interface OutputObject {
   address?: string;
   balances?: {

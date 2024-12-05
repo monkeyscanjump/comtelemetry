@@ -1,10 +1,10 @@
 "use client"; // This is a client component
 import React from 'react';
 import { formatBalance } from '../utils/helpers';
-import { KeyDisplayProps } from '@types/types';
+import { KeyDisplayProps } from '@comalt/types';
 import styles from './KeyDisplay.module.css';
 
-const KeyDisplay: React.FC<KeyDisplayProps> = ({ data, loading }) => {
+const KeyDisplay: React.FC<KeyDisplayProps> = ({ data }) => {
   return (
     <div className={styles.communeKeysDisplay}>
       {data && Object.entries(data).map(([key, value]) => (
@@ -15,12 +15,6 @@ const KeyDisplay: React.FC<KeyDisplayProps> = ({ data, loading }) => {
           <h3 className={styles.communeKeyName}>{key}</h3>
           <p><b>Address:</b> {value.address}</p>
           <div className={styles.communeKeyDetails}>
-            {loading && value.stats?.debounceApplied && (
-              <p><b>Stats Debounce Applied:</b> Yes, {value.stats.debounceValue}ms</p>
-            )}
-            {loading && value.balance?.balances.debounceApplied && (
-              <p><b>Balance Debounce Applied:</b> Yes, {value.balance.balances.debounceValue}ms</p>
-            )}
             {value.stats?.subnets ? (
               <ul>
                 <h5>Subnets:</h5>

@@ -11,17 +11,17 @@ interface ControlBarProps {
 }
 
 // Define the AxiosError type
-interface AxiosError<T = any> extends Error {
-  config?: any;
+interface AxiosError<T = unknown> extends Error {
+  config?: Record<string, unknown>;
   code?: string;
-  request?: any;
+  request?: unknown;
   response?: {
     data: T;
     status: number;
     statusText: string;
-    headers: any;
-    config: any;
-    request?: any;
+    headers: Record<string, string>;
+    config: Record<string, unknown>;
+    request?: unknown;
   };
   isAxiosError: boolean;
   toJSON: () => object;

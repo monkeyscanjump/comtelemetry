@@ -5,12 +5,24 @@ import { getKeys } from '../services/keyService';
 
 const router = Router();
 
-// DATA API.
+/**
+ * GET /data
+ * Retrieves the collected data.
+ */
 router.get('/data', (req, res) => {
-  res.json(getData());
+  try {
+    const data = getData();
+    res.json(data);
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    res.status(500).json({ error: 'Failed to retrieve data' });
+  }
 });
 
-// Trigger all cron jobs
+/**
+ * POST /trigger-jobs
+ * Triggers all cron jobs immediately.
+ */
 router.post('/trigger-jobs', async (req, res) => {
   try {
     await triggerAllJobs(getKeys());

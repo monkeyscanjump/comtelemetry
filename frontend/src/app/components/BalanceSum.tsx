@@ -1,5 +1,5 @@
 import React from 'react';
-import { BalanceSumProps, BalanceData } from '../types/types';
+import { BalanceSumProps, BalanceData } from '@comalt/types';
 import styles from "./BalanceSum.module.css";
 import { calculateTotal, formatBalance } from '../utils/helpers';
 import { useSelector } from 'react-redux';

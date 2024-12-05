@@ -3,8 +3,6 @@ export interface Balances {
     free: number;
     staked: number;
     total: number;
-    debounceApplied?: boolean;
-    debounceValue?: number;
   }
   
   export interface Balance {
@@ -41,8 +39,6 @@ export interface Balances {
     apy?: number;
     stake_from?: [string, number][];
     delegation_fee?: number;
-    debounceApplied?: boolean;
-    debounceValue?: number;
   }
   
   export interface DataItem {

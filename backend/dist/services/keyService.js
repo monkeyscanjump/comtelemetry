@@ -7,29 +7,57 @@ exports.regenerateKeys = regenerateKeys;
 exports.getKeys = getKeys;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const index_1 = __importDefault(require("@config/index"));
+const config_1 = __importDefault(require("@comalt/config"));
 let keys = [];
+/**
+ * Regenerates the keys by reading the key folder and parsing the JSON files.
+ * Updates the global `keys` array with valid keys.
+ */
 function regenerateKeys() {
-    const files = fs_1.default.readdirSync(index_1.default.keyFolder).filter(file => path_1.default.extname(file) === '.json');
-    keys = files.map(file => {
-        try {
-            const content = fs_1.default.readFileSync(path_1.default.join(index_1.default.keyFolder, file), 'utf-8');
-            const parsedFile = content && JSON.parse(content);
-            const parsedFileData = (parsedFile === null || parsedFile === void 0 ? void 0 : parsedFile.data) && JSON.parse(parsedFile.data);
-            return {
-                name: parsedFileData.path || '',
-                address: parsedFileData.ss58_address || ''
-            };
+    try {
+        // Check if the key folder exists
+        if (!fs_1.default.existsSync(config_1.default.keyFolder)) {
+            console.error(`Key folder does not exist: ${config_1.default.keyFolder}`);
+            keys = [];
+            return;
         }
-        catch (error) {
-            console.error(`Error reading file ${file}:`, error);
-            return {
-                name: '',
-                address: ''
-            };
-        }
-    }).filter(key => key.name && key.address); // Filter out invalid keys
+        const files = fs_1.default.readdirSync(config_1.default.keyFolder);
+        keys = files
+            .filter(file => path_1.default.extname(file) === '.json')
+            .flatMap(file => {
+            const filePath = path_1.default.join(config_1.default.keyFolder, file);
+            try {
+                const content = fs_1.default.readFileSync(filePath, 'utf-8');
+                const parsedFile = JSON.parse(content);
+                const parsedFileData = (parsedFile === null || parsedFile === void 0 ? void 0 : parsedFile.data) && JSON.parse(parsedFile.data);
+                const key = {
+                    name: (parsedFileData === null || parsedFileData === void 0 ? void 0 : parsedFileData.path) || '',
+                    address: (parsedFileData === null || parsedFileData === void 0 ? void 0 : parsedFileData.ss58_address) || ''
+                };
+                // Only return valid keys
+                if (key.name && key.address) {
+                    return [key];
+                }
+                else {
+                    console.error(`Invalid key in file ${file}:`, key);
+                    return [];
+                }
+            }
+            catch (error) {
+                console.error(`Error parsing file ${file}:`, error);
+                return [];
+            }
+        });
+    }
+    catch (error) {
+        console.error('Error reading key folder:', error);
+        keys = [];
+    }
 }
+/**
+ * Retrieves the current list of keys.
+ * @returns {Key[]} The list of keys.
+ */
 function getKeys() {
     return keys;
 }

@@ -1,4 +1,4 @@
-import { BalanceData, TotalBalance } from '../types/types';
+import { BalanceData, TotalBalance } from '@comalt/types';
 import { formatAmount } from '@did-network/dapp-sdk';
 
 export const calculateTotal = (data: BalanceData[], property: keyof TotalBalance): number => {
