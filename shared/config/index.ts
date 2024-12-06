@@ -21,10 +21,7 @@ const config = {
   delayMs: parseInt(process.env.DELAY_MS || '250', 10),
   fetchInterval: parseInt(process.env.FETCH_INTERVAL || '60000', 10),
   allowedOrigins: [
-    `http://localhost:${frontendPort}`,
-    `192.168.21:${frontendPort}`,
-    `192.168.89:${frontendPort}`,
-    `192.168.16:${frontendPort}`
+    `http://localhost:${frontendPort}`
   ],
   endpointList: [
     {
