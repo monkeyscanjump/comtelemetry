@@ -19,7 +19,7 @@ It gathers and displays data based on web API data from Comstats and Communex en
 - [ ] Add timeline (databse) logic for FT, create graphs, automate process through UI interaction.
 - [ ] Automate connection security and optional Wireguard.
 - [ ] Find a way to save timeline data on Commune storage, based on logged-in wallet.
-- [ ] Refactor accessibility, include localizaton. 
+- [ ] Refactor accessibility, include localizaton.
 - [ ] Prepare cominer.ai
 - [x] More to come!
 

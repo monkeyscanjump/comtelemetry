@@ -14,6 +14,7 @@ declare const config: {
     frontendPort: string | number;
     delayMs: number;
     fetchInterval: number;
+    allowedOrigins: string[];
     endpointList: Endpoint[];
 };
 export default config;

@@ -25,14 +25,24 @@ function initializeServer() {
         try {
             // Initial setup
             (0, keyService_1.regenerateKeys)();
-            const communeKeys = (0, keyService_1.getKeys)();
-            (0, cronService_1.setupCronJobs)(communeKeys);
+            (0, cronService_1.setupCronJobs)((0, keyService_1.getKeys)());
             (0, watchService_1.watchKeyFolder)();
             // Create an Express application
             const app = (0, express_1.default)();
             // Middleware setup
             app.use(body_parser_1.default.json());
-            app.use((0, cors_1.default)({ origin: `http://localhost:${config_1.default.frontendPort}` }));
+            // CORS setup
+            const corsOptions = {
+                origin: (origin, callback) => {
+                    if (!origin || config_1.default.allowedOrigins.includes(origin)) {
+                        callback(null, true);
+                    }
+                    else {
+                        callback(new Error('Not allowed by CORS'));
+                    }
+                }
+            };
+            app.use((0, cors_1.default)(corsOptions));
             // Use routes
             app.use('/api', routes_1.default);
             // Error handling middleware

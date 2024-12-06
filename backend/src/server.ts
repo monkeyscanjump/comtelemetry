@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import config from '@comalt/config';
 import { regenerateKeys, getKeys } from './services/keyService';
 import { setupCronJobs } from './services/cronService';
@@ -11,9 +11,7 @@ async function initializeServer() {
   try {
     // Initial setup
     regenerateKeys();
-    const communeKeys = getKeys();
-
-    setupCronJobs(communeKeys);
+    setupCronJobs(getKeys());
     watchKeyFolder();
 
     // Create an Express application
@@ -21,7 +19,18 @@ async function initializeServer() {
 
     // Middleware setup
     app.use(bodyParser.json());
-    app.use(cors({ origin: `http://localhost:${config.frontendPort}` }));
+
+    // CORS setup
+    const corsOptions: CorsOptions = {
+      origin: (origin, callback) => {
+        if (!origin || config.allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      }
+    };
+    app.use(cors(corsOptions));
 
     // Use routes
     app.use('/api', routes);

@@ -1,6 +1,6 @@
 {
   "name": "comtelemetry",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "scripts": {
     "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "build:shared": "tsc --build shared",
@@ -22,7 +22,8 @@
     "nodemon": "^3.1.7",
     "pm2": "^5.1.0",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "cross-env": "^7.0.3"
   },
   "private": true,
   "dependencies": {

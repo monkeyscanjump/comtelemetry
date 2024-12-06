@@ -11,17 +11,26 @@ interface Endpoint {
   };
 }
 
+const frontendPort = process.env.FRONTEND_PORT || 3000;
+const backendPort = process.env.BACKEND_PORT || 3001;
+
 const config = {
   keyFolder: path.join(process.env.HOME || process.env.USERPROFILE || '', '.commune', 'key'),
-  port: process.env.BACKEND_PORT || 3001,
-  frontendPort: process.env.FRONTEND_PORT || 3000,
+  port: backendPort,
+  frontendPort: frontendPort,
   delayMs: parseInt(process.env.DELAY_MS || '250', 10),
   fetchInterval: parseInt(process.env.FETCH_INTERVAL || '60000', 10),
+  allowedOrigins: [
+    `http://localhost:${frontendPort}`,
+    `192.168.21:${frontendPort}`,
+    `192.168.89:${frontendPort}`,
+    `192.168.16:${frontendPort}`
+  ],
   endpointList: [
     {
       name: 'balance',
       endpoint: 'https://stats.communex.ai/api/accounts?account=${keys.address}',
-      cronTime: '27 */1 * * *',
+      cronTime: '15 */1 * * *',
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -31,7 +40,7 @@ const config = {
     {
       name: 'stats',
       endpoint: 'https://api.comstats.org/validators/${keys.address}',
-      cronTime: '27 */1 * * *',
+      cronTime: '15 */1 * * *',
       method: 'GET',
       headers: {
         'Accept': 'application/json',
